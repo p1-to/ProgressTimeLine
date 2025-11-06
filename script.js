@@ -72,3 +72,56 @@ prevButton.addEventListener('click', () => {
 // ★ページが読み込まれたときに、最初のデータを表示する
 // （これは、HTMLに初期値を書いたので、無くてもOKですが、念のため）
 updateDisplay();
+
+// ------------------------------
+// 入力フォームの処理（追記）
+// ------------------------------
+
+// フォームのHTML部品を取得する
+const recordForm = document.getElementById('recordForm');
+const dateInput = document.getElementById('dateInput');
+const memoInput = document.getElementById('memoInput');
+const imageInput = document.getElementById('imageInput');
+
+// フォームの「保存ボタン」が押されたときの処理
+recordForm.addEventListener('submit', (event) => {
+    // 1. フォーム送信によるページの自動リロードを防ぐ（超重要！）
+    event.preventDefault(); 
+    
+    // 2. 入力された値を取得する
+    const date = dateInput.value;
+    const memo = memoInput.value;
+    const imageFile = imageInput.files[0]; // 画像ファイルは .files[0] で取得
+
+    // 3. 画像ファイルが選ばれていなかったら、処理を中断
+    if (!imageFile) {
+        alert('画像ファイルを選択してください。');
+        return; // これ以降の処理をしない
+    }
+
+    // 4. 画像ファイルを「URL」に変換する（ブラウザの機能を使う）
+    // (これが画像ファイルをブラウザで表示するための「おまじない」です)
+    const imageUrl = URL.createObjectURL(imageFile);
+    
+    // 5. 新しいデータ（オブジェクト）を作成する
+    const newRecord = {
+        image: imageUrl,
+        date: date,
+        memo: memo
+    };
+    
+    // 6. records 配列の「最後」に新しいデータを追加する
+    records.push(newRecord);
+    
+    // 7. スライドショーの現在位置を、一番最後（追加したデータ）に更新
+    currentIndex = records.length - 1;
+    
+    // 8. 画面を更新して、追加した最新のデータを表示する
+    updateDisplay();
+    
+    // 9. フォームの入力内容をリセット（クリア）する
+    recordForm.reset();
+    
+    // 10. ユーザーにお知らせ
+    alert('新しい記録を保存しました！\n（※リロードすると消えます）');
+});

@@ -86,3 +86,66 @@ button {
 button:hover {
     background-color: #f70303; /* 少し濃い青色に */
 }
+
+/* ------------------------------
+   入力フォームのスタイル（追記）
+   ------------------------------ */
+
+/* フォーム全体 */
+.record-form {
+    max-width: 600px;
+    margin: 40px auto; /* スライドショーとの間に余白 */
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.record-form h2 {
+    text-align: center;
+    margin-top: 0;
+}
+
+/* フォームの各入力グループ */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block; /* ラベルをブロック要素にして改行 */
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* 入力欄（日付、ファイル）とテキストエリアの共通スタイル */
+.form-group input[type="date"],
+.form-group input[type="file"],
+.form-group textarea {
+    width: 100%; /* 幅を親の100%に */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* paddingを含めて幅を計算 */
+    font-family: sans-serif; /* フォントを統一 */
+    font-size: 14px;
+}
+
+/* 保存ボタン */
+.save-button {
+    width: 100%; /* 幅を100%に */
+    background-color: #28a745; /* 保存ボタンは緑色に */
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.save-button:hover {
+    background-color: #218838; /* ホバー時は少し濃い緑に */
+}
