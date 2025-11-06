@@ -13,6 +13,32 @@ h1, p {
     color: #333; /* 文字色を濃いグレーに */
 }
 
+/* ------------------------------
+   日付とメモのスタイル（追記）
+   ------------------------------ */
+
+/* 日付とメモを囲む箱 */
+.record-details {
+    padding: 15px;
+    border-top: 1px solid #eee; /* 画像との間に薄い仕切り線 */
+    margin-top: 15px; /* 画像との間に余白 */
+}
+
+/* 日付のスタイル */
+#recordDate {
+    text-align: center;
+    margin: 0 0 10px 0; /* 下にだけ少し余白 */
+    color: #555;
+}
+
+/* メモのスタイル */
+#recordMemo {
+    text-align: center;
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
 
 /* ------------------------------
    スライドショーのスタイル
