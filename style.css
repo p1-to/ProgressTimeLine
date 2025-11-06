@@ -1,0 +1,62 @@
+/* ------------------------------
+   ページ全体のスタイル（おまじない）
+   ------------------------------ */
+body {
+    font-family: sans-serif; /* 見やすいフォントに変更 */
+    background-color: #e7e5e5; /* 背景を薄いグレーに */
+    margin: 0;
+    padding: 20px;
+}
+
+h1, p {
+    text-align: center; /* 中央揃えにする */
+    color: #333; /* 文字色を濃いグレーに */
+}
+
+
+/* ------------------------------
+   スライドショーのスタイル
+   ------------------------------ */
+
+/* スライドショー全体を囲む箱 */
+.slideshow-container {
+    max-width: 600px; /* 最大の幅を600pxに指定 */
+    margin: 20px auto; /* 上下に20pxの余白、左右は自動（＝中央揃え） */
+    background-color: #ffffff; /* 背景を白に */
+    border: 1px solid #ddd; /* 薄いグレーの枠線 */
+    border-radius: 10px; /* 角を少し丸くする */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 薄い影をつけて立体感を出す */
+    padding: 20px; /* 内側に余白 */
+    box-sizing: border-box; /* paddingを含めて幅を計算する（おまじない）*/
+}
+
+/* 画像のスタイル */
+#mainImage {
+    width: 100%; /* 親の幅（.slideshow-container）いっぱいに表示 */
+    height: auto; /* 高さは自動調整 */
+    border-radius: 4px; /* 画像の角も少し丸くする */
+}
+
+/* ボタンを囲む箱 */
+.controls {
+    text-align: center; /* ボタンを中央揃えに */
+    margin-top: 20px; /* 画像との間に余白 */
+}
+
+/* ボタンのスタイル */
+button {
+    background-color: #f25858; /* 背景を青色に */
+    color: white; /* 文字を白に */
+    border: none; /* 枠線を消す */
+    padding: 10px 20px; /* ボタンの内側の余白（大きくする） */
+    font-size: 16px; /* 文字サイズ */
+    border-radius: 5px; /* ボタンの角を丸くする */
+    cursor: pointer; /* マウスを乗せたら指マーク（クリックできると示す） */
+    margin: 0 10px; /* ボタン同士の間に余白 */
+    transition: background-color 0.3s; /* 色が変わるときにフワッと変化 */
+}
+
+/* ボタンにマウスを乗せたときのスタイル */
+button:hover {
+    background-color: #f70303; /* 少し濃い青色に */
+}
