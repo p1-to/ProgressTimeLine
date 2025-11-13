@@ -149,3 +149,24 @@ button:hover {
 .save-button:hover {
     background-color: #218838; /* ホバー時は少し濃い緑に */
 }
+
+/* ------------------------------
+   削除ボタンのスタイル（追記）
+   ------------------------------ */
+
+.delete-button {
+    background-color: #dc3545; /* 危険な操作なので「赤色」に */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px; /* 上のボタンとの間に少し余白 */
+    width: 100%; /* 幅を100%にする */
+    transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+    background-color: #c82333; /* ホバー時は少し濃い赤に */
+}

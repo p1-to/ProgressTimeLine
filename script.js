@@ -54,11 +54,29 @@ const recordDate = document.getElementById('recordDate'); // ← ★追加
 const recordMemo = document.getElementById('recordMemo'); // ← ★追加
 const prevButton = document.getElementById('prevButton');
 const nextButton = document.getElementById('nextButton');
+const deleteButton = document.getElementById('deleteButton');
 
 // ★新しく「画面を更新する関数」を作る
 function updateDisplay() {
-    // 現在の番号（currentIndex）に基づいて、表示するデータを取得
-    const currentRecord = records[currentIndex];
+    // ↓ここから追記（0件のときの処理）↓
+    if (records.length === 0) {
+        mainImage.src = ''; // (または 'placeholder.jpg' などの画像)
+        mainImage.alt = '記録がありません';
+        recordDate.textContent = '---';
+        recordMemo.textContent = 'データを追加してください。';
+        return; // これ以上、下の処理はしない
+    }
+    // ↓ここから追記（currentIndexが不正な値にならないよう調整）↓
+    // もしcurrentIndexが配列の最後尾より大きければ、最後尾にする
+    if (currentIndex >= records.length) {
+        currentIndex = records.length - 1;
+    }
+    // もしcurrentIndexが0より小さければ、0にする
+    if (currentIndex < 0) {
+        currentIndex = 0;
+    }
+    // ↑ここまで追記↑
+    const currentRecord = records[currentIndex]; 
     
     // 取得したデータで、HTMLの各部品を書き換える
     mainImage.src = currentRecord.image;
@@ -160,4 +178,38 @@ recordForm.addEventListener('submit', (event) => {
     
     // 13. 実際に画像の読み込み（Base64変換）を開始する
     reader.readAsDataURL(imageFile);
+
+    // ------------------------------
+// 削除ボタンの処理（追記）
+// ------------------------------
+
+});
+deleteButton.addEventListener('click', () => {
+    // もし記録が0件なら、何もしない
+    if (records.length === 0) {
+        alert('削除する記録がありません。');
+        return;
+    }
+
+    // 1. ユーザーに最終確認
+    const currentRecord = records[currentIndex]; // 現在表示中のデータを取得
+    const confirmation = confirm(
+        `本当にこの記録を削除しますか？\n\n日付: ${currentRecord.date}\nメモ: ${currentRecord.memo}`
+    );
+
+    // 2. 「はい」(OK) が押されなかったら、処理を中断
+    if (!confirmation) {
+        return;
+    }
+
+    // 3. 配列から、現在表示中(currentIndex)のデータを1件削除
+    records.splice(currentIndex, 1);
+
+    // 4. localStorageを更新（削除後の配列を保存）
+    saveRecords();
+
+    // 5. 画面を更新
+    // (updateDisplayが自動で0件の場合や、indexのズレを処理してくれます)
+    alert('記録を削除しました。');
+    updateDisplay();
 });
