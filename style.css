@@ -58,9 +58,17 @@ h1, p {
 
 /* 画像のスタイル */
 #mainImage {
-    width: 100%; /* 親の幅（.slideshow-container）いっぱいに表示 */
-    height: auto; /* 高さは自動調整 */
-    border-radius: 4px; /* 画像の角も少し丸くする */
+    width: 100%; /* 幅は親の100% */
+    height: 550px; /* ★高さは変えず、このサイズを維持する */
+    
+    /* ↓ --- ここを 'contain' に変更 --- ↓ */
+    object-fit: contain; 
+    /* ↑ -------------------------- ↑ */
+
+    /* 補足：画像が収まらなかった部分の背景色を指定すると、見た目が良くなります */
+    background-color: black; 
+    
+    border-radius: 4px;
 }
 
 /* ボタンを囲む箱 */

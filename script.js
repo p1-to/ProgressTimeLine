@@ -36,6 +36,11 @@ function loadRecords() {
     
     // 3. もしデータがあれば、テキストを配列に戻して返す
     return JSON.parse(jsonRecords);
+    // ★ --- 追記 --- ★
+    // 日付が古い順（昇順）に並べ替える
+    loadedData.sort((a, b) => new Date(a.date) - new Date(b.date));
+    // ★ --- 追記 --- ★
+    return loadedData;
 }
 // 使う画像をあらかじめ準備する
 // const images = ['image1.jpg', 'image2.jpg']; ← 古いのは削除するか、コメントアウトする
@@ -159,6 +164,11 @@ recordForm.addEventListener('submit', (event) => {
         
         // 7. records 配列の「最後」に新しいデータを追加する
         records.push(newRecord);
+
+        // ★ --- 追記 --- ★
+        // 追加後、配列全体を日付でソートする
+        records.sort((a, b) => new Date(a.date) - new Date(b.date));
+        // ★ --- 追記 --- ★
         
         // 8.【★重要】localStorage に配列全体を保存する
         saveRecords();
