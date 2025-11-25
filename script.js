@@ -1,325 +1,267 @@
-// ------------------------------
-// localStorage 関連の関数
-// ------------------------------
+// =================================================================
+// 状態管理用変数（ステート）
+// =================================================================
+let records = [];       // 記録データの配列
+let currentIndex = 0;   // 現在表示している画像のインデックス
+let slideInterval = null; // 自動再生のタイマーID
 
-// 【保存する関数】
-// records配列をlocalStorageに丸ごと保存する
-function saveRecords() {
-    // 1. 配列を「JSON」というテキスト形式に変換する
-    const jsonRecords = JSON.stringify(records);
-    // 2. "muscleRecords" という名前でlocalStorageに保存する
-    localStorage.setItem('muscleRecords', jsonRecords);
-}
-
-// 【読み込む関数】
-// localStorageからデータを読み込んで返す
-function loadRecords() {
-    // 1. "muscleRecords" という名前でlocalStorageからテキストデータを取得
-    const jsonRecords = localStorage.getItem('muscleRecords');
+// =================================================================
+// ページ読み込み完了時に実行されるメイン処理
+// =================================================================
+document.addEventListener('DOMContentLoaded', () => {
     
-    // 2. もしデータが何も保存されていなければ（＝初回訪問時など）
-    if (!jsonRecords) {
+    // ------------------------------
+    // 1. HTML要素の取得
+    // ------------------------------
+    const els = {
+        // 表示エリア
+        mainImage: document.getElementById('mainImage'),
+        recordDate: document.getElementById('recordDate'),
+        recordMemo: document.getElementById('recordMemo'),
         
-        return [];
-    }
-    
-    // 3. もしデータがあれば、テキストを配列に戻して返す
-    return JSON.parse(jsonRecords);
-    // ★ --- 追記 --- ★
-    // 日付が古い順（昇順）に並べ替える
-    loadedData.sort((a, b) => new Date(a.date) - new Date(b.date));
-    // ★ --- 追記 --- ★
-    return loadedData;
-}
-// 使う画像をあらかじめ準備する
-// const images = ['image1.jpg', 'image2.jpg']; ← 古いのは削除するか、コメントアウトする
-
-// 【★変更点】localStorageからデータを読み込む
-let records = loadRecords(); 
-
-// 【★変更点】現在の位置を「一番最後のデータ」にする
-let currentIndex = records.length - 1; 
-
-// HTMLの「名前」がついた部品（要素）を取得する
-const mainImage = document.getElementById('mainImage');
-// ... (この下は変更なし) ...
-// HTMLの「名前」がついた部品（要素）を取得する
-const recordDate = document.getElementById('recordDate'); // ← ★追加
-const recordMemo = document.getElementById('recordMemo'); // ← ★追加
-const prevButton = document.getElementById('prevButton');
-const nextButton = document.getElementById('nextButton');
-const deleteButton = document.getElementById('deleteButton');
-// ↓ ★ここから追記・修正 ★ ↓
-const playPauseButton = document.getElementById('playPauseButton');
-const timeInput = document.getElementById('timeInput'); // ★速度入力欄
-
-// 速度調整ボタン
-const plus1sButton = document.getElementById('plus1sButton');
-const minus1sButton = document.getElementById('minus1sButton');
-const plus01sButton = document.getElementById('plus01sButton');
-const minus01sButton = document.getElementById('minus01sButton');
-
-
-// 自動再生の状態を管理する変数
-let slideInterval = null; // null は「今は動いていない」という意味
-
-// ★新しく「画面を更新する関数」を作る
-function updateDisplay() {
-    // ↓ここから追記（0件のときの処理）↓
-    if (records.length === 0) {
-        mainImage.src = ''; // (または 'placeholder.jpg' などの画像)
-        mainImage.alt = '記録がありません';
-        recordDate.textContent = '---';
-        recordMemo.textContent = 'データを追加してください。';
-        return; // これ以上、下の処理はしない
-    }
-    // ↓ここから追記（currentIndexが不正な値にならないよう調整）↓
-    // もしcurrentIndexが配列の最後尾より大きければ、最後尾にする
-    if (currentIndex >= records.length) {
-        currentIndex = records.length - 1;
-    }
-    // もしcurrentIndexが0より小さければ、0にする
-    if (currentIndex < 0) {
-        currentIndex = 0;
-    }
-    // ↑ここまで追記↑
-    const currentRecord = records[currentIndex]; 
-    
-    // 取得したデータで、HTMLの各部品を書き換える
-    mainImage.src = currentRecord.image;
-    recordDate.textContent = currentRecord.date;
-    recordMemo.textContent = currentRecord.memo;
-}
-
-// ★新しく「次の記録を表示する」関数
-function showNextRecord() {
-    // 記録がなければ何もしない
-    if (records.length === 0) return; 
-
-    currentIndex++;
-    
-    if (currentIndex >= records.length) {
-        currentIndex = 0;
-    }
-    
-    updateDisplay();
-}
-
-// ★新しく「自動再生を停止する」関数
-function stopSlideshow() {
-    if (slideInterval !== null) {
-        clearInterval(slideInterval);
-        slideInterval = null;
-        playPauseButton.textContent = '▶ 自動再生';
-        playPauseButton.classList.remove('pause-button');
-        playPauseButton.classList.add('play-button');
-    }
-}
-
-// ★新しく「自動再生を開始する」関数
-function startSlideshow() {
-    if (records.length <= 1) return;
-    stopSlideshow(); 
-
-    // parseFloatを使って、"3.0" などの小数を数値として取得
-    const seconds = parseFloat(timeInput.value); 
-    const intervalTime = seconds * 1000;
-
-    // 0.1秒（100ミリ秒）未満を許可しない
-    if (intervalTime < 100 || isNaN(intervalTime)) {
-        alert('切り替え時間は0.1秒以上の数値を入力してください。');
-        timeInput.value = '3.0'; 
-        return;
-    }
-
-    slideInterval = setInterval(showNextRecord, intervalTime); 
-    playPauseButton.textContent = '⏸ 停止';
-    playPauseButton.classList.remove('play-button');
-    playPauseButton.classList.add('pause-button');
-}
-
-
-// ★★★ 小数計算エラーを防ぐためのヘルパー関数（重要） ★★★
-function updateTimeInput(change) {
-    // 現在の値を数値として取得
-    let currentValue = parseFloat(timeInput.value);
-    
-    // 計算
-    let newValue = currentValue + change;
-    
-    // 最小値0.1秒を適用
-    if (newValue < 0.1) {
-        newValue = 0.1;
-    }
-    
-    // 計算後の値を小数点第一位で丸めて、文字列として入力欄に戻す
-    timeInput.value = newValue.toFixed(1);
-}
-
-// 「次へ」ボタンが押されたときの処理
-nextButton.addEventListener('click', () => {
-    stopSlideshow(); // 自動再生中なら一度停止
-    showNextRecord(); // 次の記録を表示
-});
-
-// 「前へ」ボタンが押されたときの処理
-prevButton.addEventListener('click', () => {
-    stopSlideshow(); // 自動再生中なら一度停止
-
-    // 記録がなければ何もしない
-    if (records.length === 0) return; 
-
-    currentIndex--;
-    
-    if (currentIndex < 0) {
-        currentIndex = records.length - 1;
-    }
-    
-    updateDisplay();
-});
-
-// 「再生/停止」ボタン
-playPauseButton.addEventListener('click', () => {
-    if (slideInterval === null) {
-        startSlideshow(); // 停止中なら再生開始
-    } else {
-        stopSlideshow(); // 再生中なら停止
-    }
-});
-
-
-// ★ --- 速度調整ボタンの処理 --- ★
-
-// +1秒ボタン
-plus1sButton.addEventListener('click', () => {
-    updateTimeInput(1.0);
-    stopSlideshow(); // 値を変えたら自動再生は停止
-});
-
-// -1秒ボタン
-minus1sButton.addEventListener('click', () => {
-    updateTimeInput(-1.0);
-    stopSlideshow();
-});
-
-// +0.1秒ボタン
-plus01sButton.addEventListener('click', () => {
-    updateTimeInput(0.1);
-    stopSlideshow();
-});
-
-// -0.1秒ボタン
-minus01sButton.addEventListener('click', () => {
-    updateTimeInput(-0.1);
-    stopSlideshow();
-});
-// ★ -------------------- ★
-
-// ... (この下に recordForm の処理が続く)
-
-// ★ページが読み込まれたときに、最初のデータを表示する
-// （これは、HTMLに初期値を書いたので、無くてもOKですが、念のため）
-updateDisplay();
-
-// ------------------------------
-// 入力フォームの処理（追記）
-// ------------------------------
-
-// フォームのHTML部品を取得する
-const recordForm = document.getElementById('recordForm');
-const dateInput = document.getElementById('dateInput');
-const memoInput = document.getElementById('memoInput');
-const imageInput = document.getElementById('imageInput');
-
-// フォームの「保存ボタン」が押されたときの処理
-recordForm.addEventListener('submit', (event) => {
-    // 1. フォーム送信によるページの自動リロードを防ぐ
-    event.preventDefault(); 
-    
-    // 2. 入力された値を取得する
-    const date = dateInput.value;
-    const memo = memoInput.value;
-    const imageFile = imageInput.files[0];
-
-    // 3. 画像ファイルが選ばれていなかったら、処理を中断
-    if (!imageFile) {
-        alert('画像ファイルを選択してください。');
-        return;
-    }
-
-    // 4.【★最重要】FileReaderを使って画像をBase64テキストに変換する
-    const reader = new FileReader();
-    
-    // 5. 画像の読み込みが完了したときの処理を、先に予約しておく
-    reader.onload = (e) => {
-        // e.target.result に、変換されたBase64テキストが入っている
-        const imageUrl = e.target.result; 
+        // コントロール
+        prevBtn: document.getElementById('prevButton'),
+        nextBtn: document.getElementById('nextButton'),
+        playPauseBtn: document.getElementById('playPauseButton'),
+        deleteBtn: document.getElementById('deleteButton'),
         
-        // 6. 新しいデータ（オブジェクト）を作成する
-        const newRecord = {
-            image: imageUrl, // Base64テキストを保存
-            date: date,
-            memo: memo
-        };
-        
-        // 7. records 配列の「最後」に新しいデータを追加する
-        records.push(newRecord);
+        // 時間設定
+        timeInput: document.getElementById('timeInput'),
+        btnsTime: {
+            p1: document.getElementById('plus1sButton'),
+            m1: document.getElementById('minus1sButton'),
+            p01: document.getElementById('plus01sButton'),
+            m01: document.getElementById('minus01sButton'),
+        },
 
-        // ★ --- 追記 --- ★
-        // 追加後、配列全体を日付でソートする
-        records.sort((a, b) => new Date(a.date) - new Date(b.date));
-        // ★ --- 追記 --- ★
-        
-        // 8.【★重要】localStorage に配列全体を保存する
-        saveRecords();
-        
-        // 9. スライドショーの現在位置を、一番最後（追加したデータ）に更新
-        currentIndex = records.length - 1;
-        
-        // 10. 画面を更新して、追加した最新のデータを表示する
-        updateDisplay();
-        
-        // 11. フォームの入力内容をリセット（クリア）する
-        recordForm.reset();
-        
-        // 12. ユーザーにお知らせ
-        alert('新しい記録を保存しました！\n（リロードしても消えません）');
+        // フォーム
+        form: document.getElementById('recordForm'),
+        inputs: {
+            date: document.getElementById('dateInput'),
+            memo: document.getElementById('memoInput'),
+            image: document.getElementById('imageInput')
+        }
     };
-    
-    // 13. 実際に画像の読み込み（Base64変換）を開始する
-    reader.readAsDataURL(imageFile);
 
     // ------------------------------
-// 削除ボタンの処理（追記）
-// ------------------------------
+    // 2. 初期化処理
+    // ------------------------------
+    loadRecords(); // データの読み込み
+    updateDisplay(); // 画面の更新
 
-});
-deleteButton.addEventListener('click', () => {
-    // もし記録が0件なら、何もしない
-    if (records.length === 0) {
-        alert('削除する記録がありません。');
-        return;
+    // ------------------------------
+    // 3. イベントリスナーの登録
+    // ------------------------------
+
+    // 前へ・次へボタン
+    els.prevBtn.addEventListener('click', () => {
+        stopSlideshow();
+        changeIndex(-1);
+    });
+    els.nextBtn.addEventListener('click', () => {
+        stopSlideshow();
+        changeIndex(1);
+    });
+
+    // 自動再生ボタン
+    els.playPauseBtn.addEventListener('click', toggleSlideshow);
+
+    // 時間調整ボタン（+0.1sなど）
+    els.btnsTime.p1.addEventListener('click', () => updateTimeInput(1.0));
+    els.btnsTime.m1.addEventListener('click', () => updateTimeInput(-1.0));
+    els.btnsTime.p01.addEventListener('click', () => updateTimeInput(0.1));
+    els.btnsTime.m01.addEventListener('click', () => updateTimeInput(-0.1));
+
+    // 削除ボタン
+    els.deleteBtn.addEventListener('click', deleteCurrentRecord);
+
+    // 保存フォーム
+    els.form.addEventListener('submit', handleSave);
+
+
+    // =================================================================
+    // 関数定義エリア
+    // =================================================================
+
+    // --- データ操作系 ---
+
+    // LocalStorageから読み込み
+    function loadRecords() {
+        const json = localStorage.getItem('muscleRecords');
+        if (json) {
+            records = JSON.parse(json);
+            // 日付順にソート（古い順）
+            records.sort((a, b) => new Date(a.date) - new Date(b.date));
+            // 最新を表示するために末尾にインデックスを合わせる
+            currentIndex = records.length > 0 ? records.length - 1 : 0;
+        } else {
+            records = [];
+            currentIndex = 0;
+        }
     }
 
-    // 1. ユーザーに最終確認
-    const currentRecord = records[currentIndex]; // 現在表示中のデータを取得
-    const confirmation = confirm(
-        `本当にこの記録を削除しますか？\n\n日付: ${currentRecord.date}\nメモ: ${currentRecord.memo}`
-    );
-
-    // 2. 「はい」(OK) が押されなかったら、処理を中断
-    if (!confirmation) {
-        return;
+    // LocalStorageへ保存
+    function saveRecords() {
+        localStorage.setItem('muscleRecords', JSON.stringify(records));
     }
 
-    // 3. 配列から、現在表示中(currentIndex)のデータを1件削除
-    records.splice(currentIndex, 1);
+    // --- 表示更新系 ---
 
-    // 4. localStorageを更新（削除後の配列を保存）
-    saveRecords();
+    function updateDisplay() {
+        if (records.length === 0) {
+            // データがない場合
+            els.mainImage.src = ''; 
+            els.mainImage.alt = 'データがありません';
+            // 表示用のダミー画像や色を設定しても良い
+            els.mainImage.style.backgroundColor = '#ccc';
+            
+            els.recordDate.textContent = '---';
+            els.recordMemo.textContent = 'フォームから新しい記録を追加してください。';
+            return;
+        }
 
-    // 5. 画面を更新
-    // (updateDisplayが自動で0件の場合や、indexのズレを処理してくれます)
-    alert('記録を削除しました。');
-    updateDisplay();
+        // インデックスの安全装置
+        if (currentIndex >= records.length) currentIndex = records.length - 1;
+        if (currentIndex < 0) currentIndex = 0;
+
+        const data = records[currentIndex];
+
+        // 画像とテキストの更新
+        els.mainImage.src = data.image;
+        els.mainImage.alt = data.memo;
+        els.mainImage.style.backgroundColor = '#000'; // 画像ありの場合は黒背景
+        els.recordDate.textContent = data.date;
+        els.recordMemo.textContent = data.memo;
+    }
+
+    function changeIndex(step) {
+        if (records.length === 0) return;
+        
+        currentIndex += step;
+        
+        // ループさせる処理
+        if (currentIndex >= records.length) {
+            currentIndex = 0;
+        } else if (currentIndex < 0) {
+            currentIndex = records.length - 1;
+        }
+        
+        updateDisplay();
+    }
+
+    // --- 時間操作系 ---
+    
+    function updateTimeInput(val) {
+        stopSlideshow(); // 時間を変えたら一旦停止
+        let current = parseFloat(els.timeInput.value);
+        let next = current + val;
+        
+        // 0.1未満にならないように
+        if (next < 0.1) next = 0.1;
+        
+        // 小数点のブレを防ぐ（例: 3.10000002 -> 3.1）
+        els.timeInput.value = Math.round(next * 10) / 10;
+    }
+
+    // --- スライドショー機能 ---
+
+    function toggleSlideshow() {
+        if (slideInterval) {
+            stopSlideshow();
+        } else {
+            startSlideshow();
+        }
+    }
+
+    function startSlideshow() {
+        if (records.length <= 1) return; // 1枚以下なら再生しない
+
+        const sec = parseFloat(els.timeInput.value);
+        if (sec < 0.1 || isNaN(sec)) {
+            alert('有効な時間を設定してください');
+            return;
+        }
+
+        // ボタンの見た目変更
+        els.playPauseBtn.textContent = '⏸ 停止';
+        els.playPauseBtn.classList.add('pause-button');
+        els.playPauseBtn.classList.remove('play-button');
+
+        // タイマーセット
+        slideInterval = setInterval(() => {
+            changeIndex(1);
+        }, sec * 1000);
+    }
+
+    function stopSlideshow() {
+        if (slideInterval) {
+            clearInterval(slideInterval);
+            slideInterval = null;
+        }
+        // ボタンの見た目を戻す
+        els.playPauseBtn.textContent = '▶ 自動再生';
+        els.playPauseBtn.classList.add('play-button');
+        els.playPauseBtn.classList.remove('pause-button');
+    }
+
+    // --- 削除・保存機能 ---
+
+    function deleteCurrentRecord() {
+        if (records.length === 0) return;
+
+        const confirmMsg = `日付: ${records[currentIndex].date}\nこの記録を削除しますか？`;
+        if (!confirm(confirmMsg)) return;
+
+        // 配列から削除
+        records.splice(currentIndex, 1);
+        saveRecords();
+        
+        // インデックス調整（削除した後、前の画像を表示するか次の画像を表示するか）
+        if (currentIndex >= records.length) {
+            currentIndex = records.length - 1;
+        }
+        
+        alert('削除しました。');
+        updateDisplay();
+    }
+
+    function handleSave(e) {
+        e.preventDefault(); // フォーム送信によるリロードを防ぐ
+
+        const file = els.inputs.image.files[0];
+        if (!file) {
+            alert('画像を選択してください');
+            return;
+        }
+
+        // 画像をBase64テキストに変換して保存
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const newRecord = {
+                date: els.inputs.date.value,
+                memo: els.inputs.memo.value,
+                image: event.target.result // Base64データ
+            };
+
+            records.push(newRecord);
+            // 日付順にソートしなおす
+            records.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            saveRecords();
+            
+            // 追加した画像を表示（最新の日付なら末尾へ）
+            // 簡易的に末尾を表示するように変更しても良いが、
+            // ここでは日付ソート後の位置を探すのが手間なので、末尾を表示する形にします
+            currentIndex = records.indexOf(newRecord); 
+            
+            updateDisplay();
+            
+            // フォームのリセット
+            els.form.reset();
+            alert('画像が保存されました！');
+        };
+
+        reader.readAsDataURL(file);
+    }
+
 });

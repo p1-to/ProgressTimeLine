@@ -1,108 +1,146 @@
 /* ------------------------------
-   ページ全体のスタイル（おまじない）
+   基本設定
    ------------------------------ */
 body {
-    font-family: sans-serif; /* 見やすいフォントに変更 */
-    background-color: #e7e5e5; /* 背景を薄いグレーに */
+    font-family: sans-serif;
+    background-color: #e7e5e5;
     margin: 0;
     padding: 20px;
 }
 
 h1, p {
-    text-align: center; /* 中央揃えにする */
-    color: #333; /* 文字色を濃いグレーに */
+    text-align: center;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 /* ------------------------------
-   日付とメモのスタイル（追記）
+   スライドショー表示エリア
    ------------------------------ */
-
-/* 日付とメモを囲む箱 */
-.record-details {
-    padding: 15px;
-    border-top: 1px solid #eee; /* 画像との間に薄い仕切り線 */
-    margin-top: 15px; /* 画像との間に余白 */
-}
-
-/* 日付のスタイル */
-#recordDate {
-    text-align: center;
-    margin: 0 0 10px 0; /* 下にだけ少し余白 */
-    color: #555;
-}
-
-/* メモのスタイル */
-#recordMemo {
-    text-align: center;
-    margin: 0;
-    color: #666;
-    font-size: 14px;
-}
-
-
-/* ------------------------------
-   スライドショーのスタイル
-   ------------------------------ */
-
-/* スライドショー全体を囲む箱 */
 .slideshow-container {
-    max-width: 600px; /* 最大の幅を600pxに指定 */
-    margin: 20px auto; /* 上下に20pxの余白、左右は自動（＝中央揃え） */
-    background-color: #ffffff; /* 背景を白に */
-    border: 1px solid #ddd; /* 薄いグレーの枠線 */
-    border-radius: 10px; /* 角を少し丸くする */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 薄い影をつけて立体感を出す */
-    padding: 20px; /* 内側に余白 */
-    box-sizing: border-box; /* paddingを含めて幅を計算する（おまじない）*/
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center; /* 中身を中央揃え */
 }
 
-/* 画像のスタイル */
+/* 画像 */
 #mainImage {
-    width: 100%; /* 幅は親の100% */
-    height: 550px; /* ★高さは変えず、このサイズを維持する */
-    
-    /* ↓ --- ここを 'contain' に変更 --- ↓ */
-    object-fit: contain; 
-    /* ↑ -------------------------- ↑ */
-
-    /* 補足：画像が収まらなかった部分の背景色を指定すると、見た目が良くなります */
-    background-color: black; 
-    
+    width: 100%;
+    height: 550px; 
+    object-fit: contain; /* 画像全体を表示 */
+    background-color: #000; /* 余白は黒 */
     border-radius: 4px;
 }
 
-/* ボタンを囲む箱 */
-.controls {
-    text-align: center; /* ボタンを中央揃えに */
-    margin-top: 20px; /* 画像との間に余白 */
+/* 日付とメモ */
+.record-details {
+    padding: 15px 0 0 0;
+    border-top: 1px solid #eee;
+    margin-top: 15px;
 }
 
-/* ボタンのスタイル */
-button {
-    background-color: #f25858; /* 背景を青色に */
-    color: white; /* 文字を白に */
-    border: none; /* 枠線を消す */
-    padding: 10px 20px; /* ボタンの内側の余白（大きくする） */
-    font-size: 16px; /* 文字サイズ */
-    border-radius: 5px; /* ボタンの角を丸くする */
-    cursor: pointer; /* マウスを乗せたら指マーク（クリックできると示す） */
-    margin: 0 10px; /* ボタン同士の間に余白 */
-    transition: background-color 0.3s; /* 色が変わるときにフワッと変化 */
+#recordDate {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
 }
 
-/* ボタンにマウスを乗せたときのスタイル */
-button:hover {
-    background-color: #f70303; /* 少し濃い青色に */
+#recordMemo {
+    color: #666;
+    font-size: 14px;
+    white-space: pre-wrap; /* 改行を反映 */
 }
 
 /* ------------------------------
-   入力フォームのスタイル（追記）
+   操作パネル・ボタン
    ------------------------------ */
+.controls {
+    text-align: center;
+    margin-top: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-/* フォーム全体 */
+.setting-group {
+    margin-bottom: 15px;
+    color: #555;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+#timeInput {
+    width: 60px;
+    padding: 5px;
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* ボタン共通 */
+button {
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 5px;
+}
+
+/* メイン操作ボタン（前へ・次へなど） */
+.main-controls button {
+    background-color: #f25858;
+}
+.main-controls button:hover {
+    background-color: #d14040;
+}
+
+/* 速度調整の小ボタン */
+.step-button {
+    background-color: #6c757d;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+.step-button:hover {
+    background-color: #5a6268;
+}
+
+/* 再生・停止・削除ボタンの特定色 */
+.play-button { background-color: #28a745 !important; }
+.play-button:hover { background-color: #218838 !important; }
+
+.pause-button { background-color: #007bff !important; }
+.pause-button:hover { background-color: #0056b3 !important; }
+
+.delete-button { 
+    background-color: #dc3545 !important; 
+    margin-top: 15px;
+    width: 100%;
+    max-width: 600px;
+}
+.delete-button:hover { background-color: #c82333 !important; }
+
+/* ------------------------------
+   入力フォーム
+   ------------------------------ */
 .record-form {
     max-width: 600px;
-    margin: 40px auto; /* スライドショーとの間に余白 */
+    margin: 40px auto;
     padding: 20px;
     background-color: #ffffff;
     border: 1px solid #ddd;
@@ -110,134 +148,29 @@ button:hover {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.record-form h2 {
-    text-align: center;
-    margin-top: 0;
-}
+.record-form h2 { text-align: center; margin-top: 0; }
 
-/* フォームの各入力グループ */
-.form-group {
-    margin-bottom: 15px;
-}
+.form-group { margin-bottom: 15px; }
 
 .form-group label {
-    display: block; /* ラベルをブロック要素にして改行 */
+    display: block;
     margin-bottom: 5px;
     font-weight: bold;
     color: #555;
 }
 
-/* 入力欄（日付、ファイル）とテキストエリアの共通スタイル */
-.form-group input[type="date"],
-.form-group input[type="file"],
-.form-group textarea {
-    width: 100%; /* 幅を親の100%に */
+.form-group input, .form-group textarea {
+    width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* paddingを含めて幅を計算 */
-    font-family: sans-serif; /* フォントを統一 */
+    box-sizing: border-box;
     font-size: 14px;
 }
 
-/* 保存ボタン */
 .save-button {
-    width: 100%; /* 幅を100%に */
-    background-color: #28a745; /* 保存ボタンは緑色に */
-    color: white;
-    padding: 12px;
-    font-size: 16px;
+    width: 100%;
+    background-color: #28a745;
     font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
 }
-
-.save-button:hover {
-    background-color: #218838; /* ホバー時は少し濃い緑に */
-}
-
-/* ------------------------------
-   削除ボタンのスタイル（追記）
-   ------------------------------ */
-
-.delete-button {
-    background-color: #dc3545; /* 危険な操作なので「赤色」に */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px; /* 上のボタンとの間に少し余白 */
-    width: 100%; /* 幅を100%にする */
-    transition: background-color 0.3s;
-}
-
-.delete-button:hover {
-    background-color: #c82333; /* ホバー時は少し濃い赤に */
-}
-
-
-
-/* ------------------------------
-   速度設定のスタイル（追記・修正）
-   ------------------------------ */
-
-/* setting-groupを中央揃え、ボタン同士が近くなるように修正 */
-.setting-group {
-    text-align: center;
-    margin-bottom: 15px;
-    color: #555;
-}
-
-/* 入力欄 */
-#timeInput {
-    width: 60px; 
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    text-align: center;
-    font-size: 16px;
-    margin-left: 5px;
-    margin-right: 5px; /* ボタンと離すために余白追加 */
-}
-
-/* 速度調整ボタンの共通スタイル */
-.step-button {
-    background-color: #6c757d; /* グレー */
-    color: white;
-    border: none;
-    padding: 5px 8px; /* 小さくする */
-    font-size: 14px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 0 2px;
-}
-
-.step-button:hover {
-    background-color: #5a6268;
-}
-
-/* ------------------------------
-   自動再生ボタンのスタイル（追記）
-   ------------------------------ */
-
-/* 再生ボタンの色を強調 */
-.play-button {
-    background-color: #28a745; /* 緑色 */
-    transition: background-color 0.3s;
-}
-.play-button:hover {
-    background-color: #218838;
-}
-
-/* 停止ボタンの色 */
-.pause-button {
-    background-color: #007bff; /* 青色 */
-    transition: background-color 0.3s;
-}
-.pause-button:hover {
-    background-color: #0056b3;
-}
+.save-button:hover { background-color: #218838; }
