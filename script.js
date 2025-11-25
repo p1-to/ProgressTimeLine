@@ -60,6 +60,19 @@ const recordMemo = document.getElementById('recordMemo'); // ← ★追加
 const prevButton = document.getElementById('prevButton');
 const nextButton = document.getElementById('nextButton');
 const deleteButton = document.getElementById('deleteButton');
+// ↓ ★ここから追記・修正 ★ ↓
+const playPauseButton = document.getElementById('playPauseButton');
+const timeInput = document.getElementById('timeInput'); // ★速度入力欄
+
+// 速度調整ボタン
+const plus1sButton = document.getElementById('plus1sButton');
+const minus1sButton = document.getElementById('minus1sButton');
+const plus01sButton = document.getElementById('plus01sButton');
+const minus01sButton = document.getElementById('minus01sButton');
+
+
+// 自動再生の状態を管理する変数
+let slideInterval = null; // null は「今は動いていない」という意味
 
 // ★新しく「画面を更新する関数」を作る
 function updateDisplay() {
@@ -89,33 +102,131 @@ function updateDisplay() {
     recordMemo.textContent = currentRecord.memo;
 }
 
-// 「次へ」ボタンが押されたときの処理
-nextButton.addEventListener('click', () => {
-    // 番号を1増やす
+// ★新しく「次の記録を表示する」関数
+function showNextRecord() {
+    // 記録がなければ何もしない
+    if (records.length === 0) return; 
+
     currentIndex++;
     
-    // もしデータの最後まで行ったら、最初に戻る
     if (currentIndex >= records.length) {
         currentIndex = 0;
     }
     
-    // 画面を更新する
-    updateDisplay(); // ← ★書き換えた
+    updateDisplay();
+}
+
+// ★新しく「自動再生を停止する」関数
+function stopSlideshow() {
+    if (slideInterval !== null) {
+        clearInterval(slideInterval);
+        slideInterval = null;
+        playPauseButton.textContent = '▶ 自動再生';
+        playPauseButton.classList.remove('pause-button');
+        playPauseButton.classList.add('play-button');
+    }
+}
+
+// ★新しく「自動再生を開始する」関数
+function startSlideshow() {
+    if (records.length <= 1) return;
+    stopSlideshow(); 
+
+    // parseFloatを使って、"3.0" などの小数を数値として取得
+    const seconds = parseFloat(timeInput.value); 
+    const intervalTime = seconds * 1000;
+
+    // 0.1秒（100ミリ秒）未満を許可しない
+    if (intervalTime < 100 || isNaN(intervalTime)) {
+        alert('切り替え時間は0.1秒以上の数値を入力してください。');
+        timeInput.value = '3.0'; 
+        return;
+    }
+
+    slideInterval = setInterval(showNextRecord, intervalTime); 
+    playPauseButton.textContent = '⏸ 停止';
+    playPauseButton.classList.remove('play-button');
+    playPauseButton.classList.add('pause-button');
+}
+
+
+// ★★★ 小数計算エラーを防ぐためのヘルパー関数（重要） ★★★
+function updateTimeInput(change) {
+    // 現在の値を数値として取得
+    let currentValue = parseFloat(timeInput.value);
+    
+    // 計算
+    let newValue = currentValue + change;
+    
+    // 最小値0.1秒を適用
+    if (newValue < 0.1) {
+        newValue = 0.1;
+    }
+    
+    // 計算後の値を小数点第一位で丸めて、文字列として入力欄に戻す
+    timeInput.value = newValue.toFixed(1);
+}
+
+// 「次へ」ボタンが押されたときの処理
+nextButton.addEventListener('click', () => {
+    stopSlideshow(); // 自動再生中なら一度停止
+    showNextRecord(); // 次の記録を表示
 });
 
 // 「前へ」ボタンが押されたときの処理
 prevButton.addEventListener('click', () => {
-    // 番号を1減らす
+    stopSlideshow(); // 自動再生中なら一度停止
+
+    // 記録がなければ何もしない
+    if (records.length === 0) return; 
+
     currentIndex--;
     
-    // もしデータの最初より前に戻ったら、最後に行く
     if (currentIndex < 0) {
         currentIndex = records.length - 1;
     }
     
-    // 画面を更新する
-    updateDisplay(); // ← ★書き換えた
+    updateDisplay();
 });
+
+// 「再生/停止」ボタン
+playPauseButton.addEventListener('click', () => {
+    if (slideInterval === null) {
+        startSlideshow(); // 停止中なら再生開始
+    } else {
+        stopSlideshow(); // 再生中なら停止
+    }
+});
+
+
+// ★ --- 速度調整ボタンの処理 --- ★
+
+// +1秒ボタン
+plus1sButton.addEventListener('click', () => {
+    updateTimeInput(1.0);
+    stopSlideshow(); // 値を変えたら自動再生は停止
+});
+
+// -1秒ボタン
+minus1sButton.addEventListener('click', () => {
+    updateTimeInput(-1.0);
+    stopSlideshow();
+});
+
+// +0.1秒ボタン
+plus01sButton.addEventListener('click', () => {
+    updateTimeInput(0.1);
+    stopSlideshow();
+});
+
+// -0.1秒ボタン
+minus01sButton.addEventListener('click', () => {
+    updateTimeInput(-0.1);
+    stopSlideshow();
+});
+// ★ -------------------- ★
+
+// ... (この下に recordForm の処理が続く)
 
 // ★ページが読み込まれたときに、最初のデータを表示する
 // （これは、HTMLに初期値を書いたので、無くてもOKですが、念のため）

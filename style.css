@@ -178,3 +178,66 @@ button:hover {
 .delete-button:hover {
     background-color: #c82333; /* ホバー時は少し濃い赤に */
 }
+
+
+
+/* ------------------------------
+   速度設定のスタイル（追記・修正）
+   ------------------------------ */
+
+/* setting-groupを中央揃え、ボタン同士が近くなるように修正 */
+.setting-group {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+/* 入力欄 */
+#timeInput {
+    width: 60px; 
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 16px;
+    margin-left: 5px;
+    margin-right: 5px; /* ボタンと離すために余白追加 */
+}
+
+/* 速度調整ボタンの共通スタイル */
+.step-button {
+    background-color: #6c757d; /* グレー */
+    color: white;
+    border: none;
+    padding: 5px 8px; /* 小さくする */
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 2px;
+}
+
+.step-button:hover {
+    background-color: #5a6268;
+}
+
+/* ------------------------------
+   自動再生ボタンのスタイル（追記）
+   ------------------------------ */
+
+/* 再生ボタンの色を強調 */
+.play-button {
+    background-color: #28a745; /* 緑色 */
+    transition: background-color 0.3s;
+}
+.play-button:hover {
+    background-color: #218838;
+}
+
+/* 停止ボタンの色 */
+.pause-button {
+    background-color: #007bff; /* 青色 */
+    transition: background-color 0.3s;
+}
+.pause-button:hover {
+    background-color: #0056b3;
+}
