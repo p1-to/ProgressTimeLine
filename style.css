@@ -355,3 +355,22 @@ textarea {
     /* スマホではボタンを縦積みにしない（押しやすさ重視で横並び維持） */
     /* ただし、あまりに狭い場合は調整 */
 }
+/* 全削除ボタン */
+.delete-all-button {
+    background: transparent;
+    border: 1px solid #555;
+    color: #888;
+    margin-top: 20px;
+    font-size: 0.8em;
+    padding: 8px 15px;
+    border-radius: 20px;
+    width: auto; /* 幅を自動調整 */
+    transition: all 0.3s;
+}
+
+.delete-all-button:hover {
+    border-color: #dc3545;
+    color: #dc3545;
+    background: rgba(220, 53, 69, 0.1);
+    box-shadow: 0 0 10px rgba(220, 53, 69, 0.2);
+}
