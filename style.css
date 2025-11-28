@@ -1,53 +1,60 @@
 /* =================================================================
-   基本設定（ダークモード基調）
+   基本設定（ダークモード基調 + グラデーション）
    ================================================================= */
 body {
-    font-family: 'Inter', 'Noto Sans JP', sans-serif; /* モダンなフォント優先 */
-    background-color: #1a1a1a; /* ダークグレーの背景 */
-    color: #e0e0e0; /* 明るいグレーの文字色 */
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    background-color: #1a1a1a;
+    background-image: radial-gradient(circle at 50% 0%, #333333 0%, #1a1a1a 80%);
+    background-attachment: fixed; /* 背景固定 */
+    color: #e0e0e0;
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* paddingとborderをwidth/heightに含める */
-    min-height: 100vh; /* 最小高さをビューポートの高さに */
+    box-sizing: border-box;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center; /* 中央寄せ */
+    align-items: center;
 }
 
 h1 {
-    font-size: 2.5em; /* 見出しを大きく */
+    font-size: 2.5em;
     color: #f0f0f0;
-    margin-bottom: 0.5em;
-    font-weight: 700; /* 太字 */
+    margin: 0.5em 0 0.2em 0;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
 p {
-    font-size: 1.1em;
+    font-size: 1em;
     color: #c0c0c0;
     margin-bottom: 1.5em;
+    text-align: center;
 }
 
 .container {
     width: 100%;
-    max-width: 1000px; /* 全体の最大幅を広げる */
+    max-width: 800px;
     padding: 20px;
     box-sizing: border-box;
     display: flex;
-    flex-direction: column; /* 縦並びを基本に */
+    flex-direction: column;
     align-items: center;
 }
 
 /* =================================================================
-   スライドショー表示エリア
+   スライドショーカード
    ================================================================= */
 .slideshow-container {
-    background-color: #2a2a2a; /* カードの背景色 */
-    border-radius: 15px; /* 丸みを強く */
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); /* 強めの影 */
+    background-color: rgba(40, 40, 40, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     padding: 25px;
-    margin: 30px 0;
+    margin-bottom: 30px;
     width: 100%;
-    max-width: 500px; /* スライドショーカードの最大幅 */
+    max-width: 500px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -56,11 +63,12 @@ p {
 
 #mainImage {
     width: 100%;
-    height: 350px; /* 画像の高さを調整 */
+    height: 350px;
     object-fit: contain;
     background-color: #000;
-    border-radius: 10px; /* 画像も角丸に */
-    border: 1px solid #444; /* 控えめな枠線 */
+    border-radius: 12px;
+    border: 1px solid #444;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
 }
 
 .record-details {
@@ -70,192 +78,189 @@ p {
 }
 
 #recordDate {
-    font-size: 1.1em;
-    font-weight: 600;
-    color: #88aaff; /* アクセントカラー（青） */
-    margin-bottom: 5px;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #88aaff; /* 青アクセント */
+    margin: 0 0 5px 0;
+    letter-spacing: 0.05em;
 }
 
 #recordMemo {
     font-size: 0.95em;
-    color: #c0c0c0;
-    line-height: 1.5;
+    color: #cccccc;
+    line-height: 1.6;
     white-space: pre-wrap;
-    min-height: 3em; /* メモがない時も高さ確保 */
+    min-height: 1.5em;
+    margin: 0;
 }
 
 /* =================================================================
-   コントロールパネル（ボタン群）
+   コントロールパネル
    ================================================================= */
 .controls {
+    background-color: rgba(40, 40, 40, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     width: 100%;
     max-width: 500px;
-    margin-bottom: 30px;
-    background-color: #2a2a2a;
-    border-radius: 15px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
     padding: 25px;
+    margin-bottom: 40px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px; /* 要素間の隙間 */
+    gap: 20px;
 }
 
+/* 時間設定エリア */
 .setting-group {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px; /* ボタンと入力欄の隙間 */
-    flex-wrap: wrap; /* スマホで折り返す */
+    gap: 8px;
+    flex-wrap: wrap;
+    background: rgba(0,0,0,0.2);
+    padding: 10px 15px;
+    border-radius: 50px; /* カプセル型 */
 }
 
 .setting-group label {
-    font-size: 0.95em;
-    color: #c0c0c0;
+    font-size: 0.9em;
+    color: #aaa;
 }
 
 #timeInput {
-    background-color: #3a3a3a;
+    background-color: #333;
     border: 1px solid #555;
-    color: #e0e0e0;
-    border-radius: 8px;
-    padding: 8px 12px;
-    width: 70px; /* 幅を調整 */
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px;
+    width: 60px;
     text-align: center;
-    font-size: 1em;
+    font-weight: bold;
 }
 
-/* ボタン共通スタイル */
+/* ボタン共通設定 */
 button {
     border: none;
-    border-radius: 8px; /* 少し丸みを強く */
+    border-radius: 8px;
     padding: 12px 20px;
     font-size: 1em;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease-in-out; /* ホバーエフェクトを滑らかに */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* ボタンにも影 */
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-button:hover {
-    transform: translateY(-2px); /* 少し浮き上がる効果 */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+button:active {
+    transform: scale(0.95);
 }
 
-/* メイン操作ボタン（前へ・次へなど） */
+/* 小さい調整ボタン */
+.step-button {
+    background-color: #555;
+    color: #fff;
+    padding: 6px 10px;
+    font-size: 0.8em;
+    border-radius: 6px;
+}
+.step-button:hover {
+    background-color: #666;
+}
+
+/* メイン操作ボタン群 */
 .main-controls {
     display: flex;
-    gap: 10px;
-    width: 100%;
+    align-items: center;
     justify-content: center;
+    gap: 15px;
+    width: 100%;
 }
 
-/* メイン操作ボタン（前へ・次へなど） */
-.main-controls button {
-    /* ↓↓↓ 暖色系のグラデーションを少し落ち着かせる ↓↓↓ */
-    background: linear-gradient(135deg, #ff9a8d, #ff6a88); 
+/* 前へ・次へボタン */
+#prevButton, #nextButton {
+    background: linear-gradient(135deg, #ff9a8d, #ff6a88);
     color: white;
-    flex-grow: 1; 
-    max-width: 120px; 
+    flex-grow: 1;
+    max-width: 120px;
+}
+#prevButton:hover, #nextButton:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
 }
 
-/* 再生・停止ボタン (play-button) */
+/* 再生・停止ボタン（円形） */
 .play-button {
-    /* --- 色と見た目 --- */
     background: linear-gradient(135deg, #a8e063, #56ab2f) !important;
-    color: #ffffff !important;
-    border: 4px solid #ffffff !important; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-
-    /* --- ↓↓↓ ここが決定的な修正ポイント ↓↓↓ --- */
-    
-    /* 1. Flexboxの引き伸ばしを強制的に無効化する */
-    flex-grow: 0 !important;
-    flex-shrink: 0 !important;
-    
-    /* 2. 幅と高さを固定し、最小・最大も固定して形崩れを防ぐ */
+    color: #fff !important;
+    border: 3px solid rgba(255,255,255,0.2) !important;
     width: 70px !important;
     height: 70px !important;
-    min-width: 70px !important;
-    max-width: 70px !important;
-    
-    /* 3. 余白をゼロにして、左右のボタンとの距離を少し空ける */
-    padding: 0 !important;
-    margin: 0 15px !important; 
-
-    /* 4. 完全な円にする */
-    border-radius: 50% !important; 
-    
-    /* 5. アイコンを中央に配置 */
+    border-radius: 50% !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     font-size: 1.5em !important;
-    
-    /* --- ↑↑↑ ここまで ↑↑↑ --- */
+    padding: 0 !important;
+    margin: 0 10px !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 0 20px rgba(86, 171, 47, 0.4);
 }
-
-/* ホバー時のスタイル */
 .play-button:hover {
-    background: linear-gradient(135deg, #74b83f, #418524) !important;
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-}
-.pause-button {
-    background: linear-gradient(135deg, #007bff, #0056b3); /* 青のグラデーション */
-    color: white;
-}
-.pause-button:hover {
-    background: linear-gradient(135deg, #0056b3, #003d80);
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(86, 171, 47, 0.6);
 }
 
-/* 速度調整の小ボタン */
-.step-button {
-    background-color: #4a4a4a; /* ダークグレー */
-    color: #e0e0e0;
-    padding: 6px 10px;
-    font-size: 0.85em;
-    box-shadow: none; /* 小ボタンは影なし */
-}
-.step-button:hover {
-    background-color: #5a5a5a;
-    transform: none; /* 浮き上がる効果なし */
+/* 停止中スタイル */
+.pause-button {
+    background: linear-gradient(135deg, #4facfe, #00f2fe) !important; /* 水色系 */
+    box-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
 }
 
 /* 削除ボタン */
 .delete-button {
-    background: linear-gradient(135deg, #f74759, #ba5660); /* 赤のグラデーション */
-    color: white;
-    width: calc(100% - 20px); /* 左右のパディング分を引く */
-    max-width: 60px; /* 最大幅を調整 */
+    background: transparent !important;
+    border: 2px solid #dc3545 !important;
+    color: #dc3545 !important;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 10px;
 }
 .delete-button:hover {
-    background: linear-gradient(135deg, #c82333, #a71d2a);
+    background: #dc3545 !important;
+    color: white !important;
+    box-shadow: 0 0 15px rgba(220, 53, 69, 0.6);
 }
-
 
 /* =================================================================
    入力フォーム
    ================================================================= */
 .record-form {
-    background-color: #2a2a2a;
-    border-radius: 15px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-    padding: 25px;
-    margin-bottom: 40px;
-    width: 100%;
-    max-width: 500px;
+    background-color: rgba(40, 40, 40, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    max-width: 600px;
+    width: 90%;
+    margin: 0 auto 60px auto;
+    padding: 30px;
     box-sizing: border-box;
 }
 
 .record-form h2 {
-    font-size: 1.8em;
-    color: #f0f0f0;
-    margin-bottom: 1em;
     text-align: center;
-    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #f0f0f0;
+    font-size: 1.5em;
 }
 
 .form-group {
@@ -264,99 +269,89 @@ button:hover {
 
 .form-group label {
     display: block;
-    font-weight: 500;
-    color: #c0c0c0;
     margin-bottom: 8px;
-    font-size: 1em;
+    color: #ccc;
+    font-weight: 500;
 }
 
+/* 入力フィールドの共通設定 */
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 12px;
-    background-color: #3a3a3a;
-    border: 1px solid #555;
-    color: #e0e0e0;
-    border-radius: 8px;
-    box-sizing: border-box;
+    padding: 15px;
+    background-color: #2a2a2a;
+    border: 1px solid #555; /* 通常時の枠線 */
+    border-radius: 10px;
+    color: #fff;
     font-size: 1em;
+    box-sizing: border-box;
+    outline: none; /* デフォルトのアウトラインを消す */
+    
+    /* ↓↓↓ 光らせるための準備（アニメーション） ↓↓↓ */
+    transition: all 0.3s ease; 
 }
 
 .form-group input[type="file"] {
-    /* ファイル入力のデフォルトスタイルを調整 */
-    padding: 8px 12px;
+    padding: 10px;
+    background-color: #333;
 }
 
-/* input type="date" のテキスト色を調整 */
-.form-group input[type="date"] {
-    color-scheme: dark; /* ダークモードのdatepicker表示 */
+/* 日付ピッカーの色調整 */
+input[type="date"] {
+    color-scheme: dark;
 }
 
-.form-group textarea {
-    resize: vertical; /* 縦方向のみリサイズ可能に */
-    min-height: 80px;
+/* テキストエリア */
+textarea {
+    resize: vertical;
 }
 
+/* 保存ボタン */
 .save-button {
     width: 100%;
-    background: linear-gradient(135deg, #28a745, #218838); /* 保存ボタンは緑 */
+    background: linear-gradient(135deg, #11998e, #38ef7d); /* 緑グラデ */
     color: white;
     font-size: 1.1em;
-    padding: 15px;
     font-weight: 700;
+    padding: 15px;
+    margin-top: 10px;
 }
 .save-button:hover {
-    background: linear-gradient(135deg, #218838, #1a732e);
+    filter: brightness(1.1);
+    box-shadow: 0 0 20px rgba(56, 239, 125, 0.4);
 }
 
 /* =================================================================
-   レスポンシブデザイン（スマートフォン対応）
+   === フォーカス時の発光設定（修正箇所） ===
    ================================================================= */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2em;
-    }
 
-    p {
-        font-size: 1em;
-    }
-
-    .container, .slideshow-container, .controls, .record-form {
-        padding: 15px;
-        margin: 15px auto; /* 左右中央寄せ */
-    }
-
-    .slideshow-container, .controls, .record-form {
-        max-width: 95%; /* スマホでは画面幅のほとんどを使う */
-    }
-
-    #mainImage {
-        height: 250px; /* スマホでは画像を小さく */
-    }
-
-    .main-controls {
-        flex-direction: column; /* スマホではボタンを縦に並べる */
-        gap: 8px;
-    }
-
-    .main-controls button, .delete-button, .save-button {
-        width: 100%; /* スマホではボタンを横幅いっぱいに */
-        max-width: none; /* 最大幅制限を解除 */
-        padding: 12px 15px;
-    }
-
-    .setting-group {
-        flex-direction: column; /* スマホでは設定グループも縦並び */
-        gap: 10px;
-    }
-
-    .setting-group label, #timeInput {
-        width: 100%; /* 幅いっぱいに */
-        text-align: center;
-    }
-
-    .setting-group button {
-        width: 48%; /* 2列で並べるために調整 */
-    }
+/* ID指定で確実に光らせる */
+#dateInput:focus,
+#memoInput:focus,
+#imageInput:focus,
+#timeInput:focus {
+    /* 枠線を明るい緑色に */
+    border-color: #a8e063 !important; 
+    
+    /* 背景を少し明るくして入力しやすく */
+    background-color: #333 !important; 
+    
+    /* 強い光彩（グロー効果） */
+    box-shadow: 0 0 15px rgba(168, 224, 99, 0.6), 
+                0 0 5px rgba(168, 224, 99, 0.8) !important;
+    
+    /* 拡大などはせず、色と光で強調 */
 }
-```http://googleusercontent.com/image_generation_content/2
+
+/* =================================================================
+   スマホ対応 (レスポンシブ)
+   ================================================================= */
+@media (max-width: 600px) {
+    h1 { font-size: 2em; }
+    .container, .record-form { width: 95%; padding: 15px; }
+    #mainImage { height: 250px; }
+    .main-controls { gap: 10px; }
+    
+    /* スマホではボタンを縦積みにしない（押しやすさ重視で横並び維持） */
+    /* ただし、あまりに狭い場合は調整 */
+}
