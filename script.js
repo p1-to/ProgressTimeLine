@@ -113,11 +113,10 @@ window.onload = async function() {
     const playPauseButton = document.getElementById('playPauseButton');
     const timeInput = document.getElementById('timeInput');
     
-    const plus1sButton = document.getElementById('plus1sButton');
-    const minus1sButton = document.getElementById('minus1sButton');
-    const plus01sButton = document.getElementById('plus01sButton');
-    const minus01sButton = document.getElementById('minus01sButton');
-
+    // 時間調整ボタン（新しいIDに変更）
+    const plus05sButton = document.getElementById('plus05sButton');
+    const minus05sButton = document.getElementById('minus05sButton');
+    // 古い4つのボタン（plus1sButtonなど）の行は削除してください
     const recordForm = document.getElementById('recordForm');
     const dateInput = document.getElementById('dateInput');
     const memoInput = document.getElementById('memoInput');
@@ -214,6 +213,93 @@ window.onload = async function() {
         }
     });
 
+    // --- 追加要素の取得 ---
+    const exitFullscreenBtn = document.getElementById('exitFullscreenBtn');
+    let hideButtonTimer = null; // タイマー用変数
+
+    // ボタンを表示し、3秒後に隠す関数
+    function showButtonTemporarily() {
+        // ボタンを表示（隠すクラスを外す）
+        exitFullscreenBtn.classList.remove('hidden');
+
+        // 既存のタイマーがあればリセット
+        if (hideButtonTimer) clearTimeout(hideButtonTimer);
+
+        // 3秒後に隠すタイマーをセット
+        hideButtonTimer = setTimeout(() => {
+            exitFullscreenBtn.classList.add('hidden');
+        }, 3000); // 3000ミリ秒 = 3秒
+    }
+
+    // 画像をクリックしたら全画面モードへ
+    mainImage.addEventListener('click', () => {
+        if (records.length === 0) return;
+        document.body.classList.add('fullscreen-mode');
+        
+        // 全画面になった瞬間もタイマー開始
+        showButtonTemporarily();
+    });
+
+    // 閉じるボタンで全画面モード解除
+    exitFullscreenBtn.addEventListener('click', () => {
+        document.body.classList.remove('fullscreen-mode');
+        // タイマー解除
+        if (hideButtonTimer) clearTimeout(hideButtonTimer);
+    });
+    
+    // 全画面モード中に画面（どこでも）をタップしたらボタンを一時表示
+    document.addEventListener('click', (e) => {
+        if (document.body.classList.contains('fullscreen-mode')) {
+            showButtonTemporarily();
+        }
+    });
+    // スマホのタップ対応
+    document.addEventListener('touchstart', (e) => {
+        if (document.body.classList.contains('fullscreen-mode')) {
+            showButtonTemporarily();
+        }
+    });
+
+    // キーボード操作（変更なし）
+    document.addEventListener('keydown', (e) => {
+        if (!document.body.classList.contains('fullscreen-mode')) return;
+        
+        // 何かキーを押してもボタンを表示させる
+        showButtonTemporarily();
+        
+        if (e.key === 'ArrowRight') {
+            stopSlideshow(); showNextRecord();
+        } else if (e.key === 'ArrowLeft') {
+            stopSlideshow();
+            currentIndex--;
+            if (currentIndex < 0) currentIndex = records.length - 1;
+            updateDisplay();
+        } else if (e.key === 'Escape') {
+            document.body.classList.remove('fullscreen-mode');
+        }
+    });
+
+    // 閉じるボタンで全画面モード解除
+    exitFullscreenBtn.addEventListener('click', () => {
+        document.body.classList.remove('fullscreen-mode');
+    });
+    
+    // （オプション）全画面モード中は、矢印キーで操作できるようにする
+    document.addEventListener('keydown', (e) => {
+        if (!document.body.classList.contains('fullscreen-mode')) return;
+        
+        if (e.key === 'ArrowRight') {
+            stopSlideshow(); showNextRecord();
+        } else if (e.key === 'ArrowLeft') {
+            stopSlideshow();
+            currentIndex--;
+            if (currentIndex < 0) currentIndex = records.length - 1;
+            updateDisplay();
+        } else if (e.key === 'Escape') {
+            document.body.classList.remove('fullscreen-mode');
+        }
+    });
+
     nextButton.addEventListener('click', () => { stopSlideshow(); showNextRecord(); });
     prevButton.addEventListener('click', () => {
         stopSlideshow(); 
@@ -227,10 +313,11 @@ window.onload = async function() {
         else stopSlideshow();
     });
 
-    plus1sButton.addEventListener('click', () => { updateTimeInput(1.0); stopSlideshow(); });
-    minus1sButton.addEventListener('click', () => { updateTimeInput(-1.0); stopSlideshow(); });
-    plus01sButton.addEventListener('click', () => { updateTimeInput(0.1); stopSlideshow(); });
-    minus01sButton.addEventListener('click', () => { updateTimeInput(-0.1); stopSlideshow(); });
+    // 時間調整ボタンのイベント（新しいロジック）
+    plus05sButton.addEventListener('click', () => { updateTimeInput(0.5); stopSlideshow(); });
+    minus05sButton.addEventListener('click', () => { updateTimeInput(-0.5); stopSlideshow(); });
+    
+    // 古い4つのイベントリスナー（plus1sButtonなど）は削除してください
 
     // 1件削除
     deleteButton.addEventListener('click', async () => {

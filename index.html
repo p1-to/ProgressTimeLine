@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evolu - 筋トレ記録</title> 
+    <head>
+    <title>Evolu - 成長・変化の記録</title> 
+    </head>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
@@ -15,11 +18,11 @@
     <link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
-
+    <button id="exitFullscreenBtn">✕ 閉じる</button>
     <div class="container">
         <header>
             <h1>Evolu</h1> 
-            <p>あなたの進化を、時系列で可視化する。</p>
+            <p>あなたの「変化」を、時系列で可視化する。</p>
         </header>
 
         <div class="slideshow-container">
@@ -32,14 +35,11 @@
 
         <div class="controls">
             <div class="setting-group">
-                <label for="timeInput">速度(秒):</label>
-                <button id="minus1sButton" class="step-button">-1</button>
-                <button id="minus01sButton" class="step-button">-0.1</button>
-                
-                <input type="number" id="timeInput" min="0.1" value="3.0" step="0.1">
-                
-                <button id="plus01sButton" class="step-button">+0.1</button>
-                <button id="plus1sButton" class="step-button">+1</button>
+                <div class="setting-group">
+                <button id="minus05sButton" class="step-button">-0.5</button>
+                <input type="number" id="timeInput" min="0.1" value="1.0" step="0.1">
+                <button id="plus05sButton" class="step-button">+0.5</button>
+            </div>
             </div>
 
             <div class="main-controls">
@@ -72,7 +72,7 @@
         
         <div class="form-group">
             <label for="memoInput">メモ</label>
-            <textarea id="memoInput" rows="3" placeholder="例：ベンチプレス50kg達成！胸筋の張り良し。"></textarea>
+            <textarea id="memoInput" rows="3" placeholder="例：生後3ヶ月。耳が立ってきた！ / 今日のメイクは春色で。 / 観葉植物の新芽が出た。/ ベンチプレス100kg達成！"></textarea>
         </div>
         
         <div class="form-group">
